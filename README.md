@@ -30,6 +30,36 @@ Once ready, you may invoke the psake build script using `Invoke-psake build` or 
 
 When the module is built, you will find a portable version of it with an updated manifest & version in the ./output folder. For development purposes I prefer to setup debug.ps1 to be executed when I hit F5 in VSCode. This way the module gets built and imported each time and it makes for rapid testing.
 
+## Usage
+
+Test-IPAddress can be used to test if a CIDR formatted address is valid, and to get detailed information about the address including network and broadcast addresses, first and last host address, and total host addresses available.
+
+Test-IPAddress can also be used to simply test if a given CIDR address's network address matches the network address parameter provided.
+
+```powershell
+Test-IPAddress -Address 172.16.129.101/23
+<#
+IPAddress               : 172.16.129.101
+SubnetMask              : 255.255.254.0
+NetworkAddress          : 172.16.128.0
+BroadcastAddress        : 172.16.129.255
+FirstHostAddress        : 172.16.128.1
+LastHostAddress         : 172.16.129.254
+MaximumHosts            : 510
+IsNetworkAddressCorrect : True
+#>
+
+Test-IPAddress -Address 172.16.129.101/23 -NetworkAddress 172.16.128.0
+<#
+True
+#>
+
+Test-IPAddress -Address 172.16.129.101/23 -NetworkAddress 10.0.0.0
+<#
+False
+#>
+```
+
 ## Known issues
 
 - The Test-IPAddress function cannot take IPv6 addresses yet
