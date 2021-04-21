@@ -25,7 +25,6 @@ function Test-IPAddress {
 
         # Parameter help description
         [Parameter(Position = 3, ParameterSetName = 'Basic')]
-        [Parameter(Position = 3, ParameterSetName = 'Advanced')]
         [ValidateSet('Detailed', 'Quiet')]
         [string]
         $InformationLevel = 'Detailed'
@@ -96,13 +95,15 @@ function Test-IPAddress {
                     $result.IsNetworkAddressCorrect = $result.NetworkAddress -eq $NetworkAddress
                 }
 
-                if ($InformationLevel -eq 'Detailed') {
-                    Write-Output $result
-                }
-                else {
+                if ($PSCmdlet.ParameterSetName -eq 'Advanced') {
                     Write-Output $result.IsNetworkAddressCorrect
                 }
-
+                elseif ($InformationLevel -eq 'Quiet') {
+                    Write-Output $result.IsNetworkAddressCorrect
+                }
+                else {
+                    Write-Output $result
+                }
             }
             default {
                 throw "IPv6 is not implemented"
