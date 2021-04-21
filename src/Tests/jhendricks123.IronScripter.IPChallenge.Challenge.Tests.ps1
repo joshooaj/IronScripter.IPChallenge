@@ -25,12 +25,20 @@ Describe 'IP Challenge Tests' {
     }
 
     It 'Correctly confirms 10.125.254.165/27 is in network 10.125.254.160' {
-        $result = Test-IPAddress -Address 10.125.254.165/27 -NetworkAddress 10.125.254.160 -InformationLevel Quiet
+        $result = Test-IPAddress -Address 10.125.254.165/27 -NetworkAddress 10.125.254.160
         $result | Should -Be $true
     }
 
     It 'Correctly confirms 10.125.254.165/27 is NOT in network 10.125.254.128' {
-        $result = Test-IPAddress -Address 192.168.1.165/23 -NetworkAddress 10.125.254.128 -InformationLevel Quiet
+        $result = Test-IPAddress -Address 192.168.1.165/23 -NetworkAddress 10.125.254.128
         $result | Should -Be $false
+    }
+
+    It 'Throws an exception when an IPv6 address is provided' {
+        { Test-IPAddress -Address ::1/23 } | Should -Throw
+    }
+
+    It 'Throws an exception when the CIDR mask is too large' {
+        { Test-IPAddress -Address 192.168.1.100/33 } | Should -Throw
     }
 }
